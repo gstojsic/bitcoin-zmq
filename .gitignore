@@ -1,0 +1,12 @@
+# Gradle
+build/
+.gradle/
+
+# IDEA
+out/
+.idea/
+.run/
+*.iml
+
+#misc
+local/
