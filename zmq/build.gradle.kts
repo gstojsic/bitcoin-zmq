@@ -81,6 +81,7 @@ jreleaser {
 
     release {
         github {
+            name.set("bitcoin-zmq")
             username.set("gstojsic")
             repoOwner.set("gstojsic")
             commitAuthor {
