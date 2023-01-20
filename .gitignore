@@ -10,3 +10,4 @@ out/
 
 #misc
 local/
+/zmq/jreleaser.toml

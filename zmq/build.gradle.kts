@@ -14,8 +14,15 @@ java {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    implementation("org.zeromq:jeromq:0.5.3")
+    implementation("org.slf4j:slf4j-api:2.0.6")
+
+    testImplementation("io.github.gstojsic.bitcoin:proxy:2.0")
+    testImplementation("org.testcontainers:junit-jupiter:1.17.6")
+    testImplementation("org.testcontainers:testcontainers:1.17.6")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.slf4j:slf4j-simple:2.0.6")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 
 tasks.javadoc {
@@ -35,7 +42,7 @@ publishing {
 
             pom {
                 name.set(project.name)
-                description.set("A java lib to subscribe to bitcoin node zmq notifications")
+                description.set("A java lib for processing bitcoin node zmq notifications")
                 url.set("https://github.com/gstojsic/bitcoin-zmq")
                 licenses {
                     license {
@@ -65,17 +72,36 @@ publishing {
 }
 
 jreleaser {
+    environment {
+        setVariables("jreleaser.toml")
+    }
+
+    gitRootSearch.set(true)
+    dryrun.set(true)    //disable to release for real
+
+    release {
+        github {
+            username.set("gstojsic")
+            repoOwner.set("gstojsic")
+            commitAuthor {
+                name.set("goran")
+            }
+        }
+    }
+
     signing {
         active.set(Active.ALWAYS)
         armored.set(true)
     }
 
     deploy {
+        //active.set(Active.NEVER) //disables deploy
         maven {
             nexus2 {
                 create("maven-central") {
                     active.set(Active.ALWAYS)
                     url.set("https://s01.oss.sonatype.org/service/local")
+                    snapshotUrl.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                     closeRepository.set(true)
                     releaseRepository.set(true)
                     stagingRepository("build/staging-deploy")
